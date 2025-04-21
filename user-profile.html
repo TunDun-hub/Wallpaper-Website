@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vyliet - User Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #F5F8FA;
+      color: #1A202C;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      background: #fff;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    .navbar .logo a img {
+      height: 28px;
+    }
+
+    .navbar .search-bar {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      margin: 0 16px;
+      background: #fff;
+      border: 1px solid #CBD5E1;
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .navbar .search-bar .icon {
+      font-size: 16px;
+      color: #4A5568;
+      margin-right: 8px;
+    }
+
+    .navbar .search-bar input {
+      flex: 1;
+      border: none;
+      outline: none;
+      height: 32px;
+      font-size: 14px;
+      color: #4A5568;
+    }
+
+    .navbar .search-bar .clear {
+      font-size: 16px;
+      color: #4A5568;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    .navbar .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar .btn-upload {
+      background: #7BCFEF;
+      color: #fff;
+      font-size: 14px;
+      padding: 6px 16px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+
+    .profile-cover {
+      position: relative;
+      height: 200px;
+      background: linear-gradient(135deg, #7BCFEF 0%, #B2E0F7 100%);
+      cursor: pointer;
+    }
+
+    .profile-cover:hover {
+      filter: brightness(0.95);
+    }
+
+    .avatar {
+      position: absolute;
+      bottom: -50px;
+      left: 40px;
+      width: 100px;
+      height: 100px;
+      border: 4px solid #fff;
+      border-radius: 50%;
+      background: #eee;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .avatar:hover {
+      opacity: 0.9;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-info {
+      max-width: 960px;
+      margin: 60px auto 0;
+      padding: 0 24px;
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-meta h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      color: #4A5568;
+      margin: 8px 0;
+    }
+
+    .stats span strong {
+      color: #1A202C;
+    }
+
+    .join-date {
+      font-size: 13px;
+      color: #718096;
+    }
+
+    .main {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 24px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    .empty-state h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      color: #4A5568;
+      margin-bottom: 16px;
+    }
+
+    .btn-primary {
+      padding: 10px 24px;
+      font-size: 14px;
+      background: #7BCFEF;
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <a href="Vyliet-HTML.html"><img src="Logo.png" alt="Vyliet Logo"></a>
+    </div>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass icon"></i>
+      <input type="text" placeholder="Search images">
+      <span class="clear">✕</span>
+    </div>
+    <div class="controls">
+      <a href="#" id="login-btn" class="btn-upload">Upload</a>
+    </div>
+  </nav>
+
+  <!-- Cover & Avatar -->
+  <section class="profile-cover" id="cover-section">
+    <div class="avatar" id="avatar-section">
+      <img src="https://via.placeholder.com/100" alt="Avatar" id="avatar-img">
+    </div>
+  </section>
+
+  <!-- Profile Info -->
+  <section class="profile-info">
+    <div class="profile-header">
+      <div class="user-meta">
+        <h1 id="username">Loading username...</h1>
+      </div>
+    </div>
+    <div class="stats">
+      <span><strong>0</strong> Followers</span>
+      <span><strong>0</strong> Following</span>
+    </div>
+    <p class="join-date">Joined April 14, 2025</p>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main empty-state">
+    <h2>Nothing to see here</h2>
+    <p>Get started by uploading your images!</p>
+    <button class="btn-primary">Upload</button>
+  </main>
+
+  <!-- Hidden file inputs -->
+  <input type="file" id="avatarInput" accept="image/*" style="display:none">
+  <input type="file" id="coverInput" accept="image/*" style="display:none">
+
+  <!-- Avatar & Cover Logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const avatarImg = document.getElementById("avatar-img");
+      const avatarInput = document.getElementById("avatarInput");
+      const coverInput = document.getElementById("coverInput");
+      const avatarSection = document.getElementById("avatar-section");
+      const coverSection = document.getElementById("cover-section");
+
+      // Load from localStorage
+      const savedAvatar = localStorage.getItem("userAvatar");
+      const savedCover = localStorage.getItem("userCover");
+
+      if (savedAvatar) avatarImg.src = savedAvatar;
+      if (savedCover) {
+        coverSection.style.backgroundImage = `url(${savedCover})`;
+        coverSection.style.backgroundSize = 'cover';
+        coverSection.style.backgroundPosition = 'center';
+      }
+
+      // Prevent cover from being triggered by avatar click
+      avatarSection.addEventListener("click", (e) => {
+        e.stopPropagation(); // Only avatar
+        avatarInput.click();
+      });
+
+      coverSection.addEventListener("click", () => {
+        coverInput.click();
+      });
+
+      avatarInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const base64 = e.target.result;
+          avatarImg.src = base64;
+          localStorage.setItem("userAvatar", base64);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      coverInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const base64 = e.target.result;
+          coverSection.style.backgroundImage = `url(${base64})`;
+          coverSection.style.backgroundSize = 'cover';
+          coverSection.style.backgroundPosition = 'center';
+          localStorage.setItem("userCover", base64);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  </script>
+
+  <!-- Firebase login logic -->
+  <script type="module">
+    import { auth } from './firebase.js';
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js';
+
+    const loginBtn = document.querySelector('#login-btn');
+
+    if (loginBtn) {
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          const wrapper = document.createElement('div');
+          wrapper.id = 'profile-dropdown';
+          wrapper.style.position = 'relative';
+
+          const img = document.createElement('img');
+          img.src = user.photoURL || 'https://www.gravatar.com/avatar?d=mp&s=32';
+          img.alt = 'Profile';
+          img.style.width = '32px';
+          img.style.height = '32px';
+          img.style.borderRadius = '50%';
+          img.style.objectFit = 'cover';
+          img.style.cursor = 'pointer';
+
+          const dropdown = document.createElement('div');
+          dropdown.classList.add('dropdown-menu');
+          dropdown.style.position = 'absolute';
+          dropdown.style.top = '40px';
+          dropdown.style.right = '0';
+          dropdown.style.background = '#fff';
+          dropdown.style.border = '1px solid #ccc';
+          dropdown.style.borderRadius = '8px';
+          dropdown.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+          dropdown.style.display = 'none';
+          dropdown.style.minWidth = '180px';
+          dropdown.style.zIndex = '1000';
+
+          const item1 = document.createElement('a');
+          item1.href = 'login-and-security.html';
+          item1.textContent = '🔒 Login & Security';
+          item1.style.display = 'block';
+          item1.style.padding = '10px 16px';
+          item1.style.fontSize = '14px';
+          item1.style.color = '#1A202C';
+          item1.style.textDecoration = 'none';
+
+          const item2 = document.createElement('a');
+          item2.href = 'my_favorites.html';
+          item2.textContent = '❤️ My Favorites';
+          item2.style.display = 'block';
+          item2.style.padding = '10px 16px';
+          item2.style.fontSize = '14px';
+          item2.style.color = '#1A202C';
+          item2.style.textDecoration = 'none';
+
+          // Hover effect
+          [item1, item2].forEach(item => {
+            item.addEventListener('mouseenter', () => item.style.background = '#F0F4F8');
+            item.addEventListener('mouseleave', () => item.style.background = 'transparent');
+          });
+
+          dropdown.appendChild(item1);
+          dropdown.appendChild(item2);
+          wrapper.appendChild(img);
+          wrapper.appendChild(dropdown);
+
+          loginBtn.replaceWith(wrapper);
+
+          img.addEventListener('click', () => {
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+          });
+
+          document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+              dropdown.style.display = 'none';
+            }
+          });
+        }
+      });
+    }
+  </script>
+
+
+
+<script type="module">
+  import { auth } from './firebase.js';
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+  const db = getFirestore();
+
+  onAuthStateChanged(auth, async (user) => {
+    const nameElement = document.getElementById("username");
+    if (!user || !nameElement) return;
+
+    let displayName = user.displayName || "u_" + user.uid.slice(0, 10);
+
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (userDoc.exists() && userDoc.data().username) {
+      displayName = userDoc.data().username;
+    }
+
+    nameElement.textContent = displayName;
+  });
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Us – Vyliet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #00b2d0;
+      --primary-dark: #008ba0;
+      --bg: #c2faff;
+      --light: #f0faff;
+      --dark: #333;
+      --gray: #666;
+      --ff: 'Inter', sans-serif;
+      --radius-pill: 9999px;
+      --radius: 8px;
+      --gap: 1rem;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--ff);
+      background: #fff;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    /* —— HEADER —— */
+    .main-header {
+      /*background: var(--bg);*/
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      gap: var(--gap);
+    }
+
+    /* Logo as clickable image */
+    .logo img {
+      height: 36px;
+      display: block;
+    }
+
+    /* Search */
+    .search-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-input {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .search-input svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: var(--gray);
+      pointer-events: none;
+    }
+
+    .search-input input {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      padding-left: 2.5rem;
+      border: none;
+      border-radius: var(--radius-pill);
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      font-size: 1rem;
+      color: var(--dark);
+      outline: none;
+      transition: box-shadow 0.2s;
+    }
+
+    .search-input input::placeholder {
+      color: var(--gray);
+    }
+
+    .search-input input:focus {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: var(--gap);
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      border-radius: var(--radius-pill);
+      background: #fff;
+      color: var(--dark);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn:hover {
+      background: #f1f1f1;
+      border-color: var(--primary);
+    }
+
+    .btn.explore {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn.explore:hover {
+      background: var(--primary-dark);
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #ccc url('https://via.placeholder.com/36') center/cover no-repeat;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .search-wrapper {
+        display: none;
+      }
+    }
+
+    /* —— HERO —— */
+    .hero {
+      background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      position: relative;
+      color: #fff;
+      text-align: center;
+      padding: 5rem 1rem 3rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      font-size: 1.1rem;
+      color: #ddd;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      background: var(--primary);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-cta a {
+      padding: 0.8rem 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #fff;
+      transition: background 0.3s;
+    }
+
+    .hero-cta a:hover {
+      background: var(--primary-dark);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero-cta a {
+        padding: 0.7rem 1.2rem;
+      }
+    }
+
+    /* —— ABOUT —— */
+    .about {
+      padding: 3rem 1rem;
+    }
+
+    .about .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .about-text {
+      font-size: 1rem;
+      color: var(--gray);
+    }
+
+    .about-text h2 {
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+
+    .about-image img {
+      width: 100%;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    @media (max-width: 768px) {
+      .about .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* —— STATISTICS —— */
+    .statistics {
+      background: var(--light);
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .stat {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .stat h2 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat p {
+      font-size: 1rem;
+      color: var(--gray);
+    }
+
+    /* —— CONTACT —— */
+    .contact {
+      background: #f8f9fa;
+      padding: 4rem 2rem;
+      text-align: center;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .contact-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .contact h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #343a40;
+    }
+
+    .contact p {
+      font-size: 1.1rem;
+      color: #495057;
+      margin-bottom: 2rem;
+    }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .contact-socials {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .social-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: #6c757d;
+      transition: fill 0.3s ease;
+    }
+
+    .social-icon:hover svg {
+      fill: #007bff;
+    }
+
+    .facebook {
+      background-color: #1877f2;
+    }
+
+    .twitter {
+      background-color: #1da1f2;
+    }
+
+    .instagram {
+      background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+    }
+
+    .contact-email .email-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #007bff;
+      transition: color 0.3s ease;
+    }
+
+    .contact-email .email-link svg {
+      width: 24px;
+      height: 24px;
+      fill: #6c757d;
+      transition: fill 0.3s ease;
+    }
+
+    .contact-email .email-link:hover {
+      color: #0056b3;
+    }
+
+    .contact-email .email-link:hover svg {
+      fill: #0056b3;
+    }
+
+    @media (min-width: 768px) {
+      .contact-details {
+        flex-direction: row;
+        justify-content: center;
+        gap: 3rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="container header-inner">
+      <!-- Logo as link -->
+      <a href="Vyliet-HTML.html" class="logo">
+        <img src="Logo.png" alt="Vyliet logo">
+      </a>
+
+      <!-- Search -->
+      <div class="search-wrapper">
+        <div class="search-input">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M10.5 3a7.5 7.5 0 015.915 12.127l4.36 4.36a1 1 0 11-1.414 1.414l-4.36-4.36A7.5 7.5 0 1110.5 3zm0 2a5.5 5.5 0 100 11 5.5 5.5 0 000-11z" />
+          </svg>
+          <input type="search" placeholder="Search wallpapers…" />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button class="btn explore">Explore ▼</button>
+        <a href="vyliet_login_verified.html" class="btn login" id="login-btn">Log in</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="about">
+    <div class="container">
+      <h1>About Us</h1>
+      <p>Vyliet is a community-powered wallpaper hub. We connect designers and photographers with enthusiasts worldwide,
+        enabling easy discovery and sharing of high-quality backgrounds at no cost.</p>
+      <div class="hero-cta"><a href="#about-content">Learn More</a></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about-content">
+    <div class="container">
+      <div class="about-text">
+        <h2>Our Mission</h2>
+        <p>We're passionate about decorating screens. By curating a free, ever-growing gallery of stunning wallpapers,
+          we empower everyone to personalize their devices effortlessly.</p>
+        <h2>Our Team</h2>
+        <p>A tight-knit crew of developers, designers, and community managers keeps Vyliet fresh, friendly, and on the
+          cutting edge of visual trends.</p>
+      </div>
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=800&q=80"
+          alt="Team at work">
+      </div>
+    </div>
+  </section>
+
+  <!-- STATISTICS -->
+  <section class="statistics" id="stats">
+    <div class="container stats-grid">
+      <div class="stat">
+        <h2>50K+</h2>
+        <p>Wallpapers</p>
+      </div>
+      <div class="stat">
+        <h2>20K+</h2>
+        <p>Designers</p>
+      </div>
+      <div class="stat">
+        <h2>150K+</h2>
+        <p>Users</p>
+      </div>
+      <div class="stat">
+        <h2>30K+</h2>
+        <p>Daily Downloads</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="contact-container">
+      <h2>Liên hệ với chúng tôi</h2>
+      <p>Kết nối với chúng tôi trên mạng xã hội hoặc gửi email để được hỗ trợ!</p>
+      <div class="contact-details">
+        <div class="contact-socials">
+          <a href="https://www.facebook.com" aria-label="Facebook" target="_blank" class="social-icon facebook">
+            <svg viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M22.675 0h-21.35C.597 0 0 .6 0 1.333v21.333C0 23.4.597 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.894-4.788 4.66-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.312h3.587l-.467 3.622h-3.12V24h6.116c.728 0 1.325-.6 1.325-1.333V1.333C24 .6 23.403 0 22.675 0z" />
+            </svg>
+          </a>
+          <a href="https://www.twitter.com" aria-label="Twitter" target="_blank" class="social-icon twitter">
+            <svg viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M24 4.557a9.83 9.83 0 0 1-2.828.775 4.93 4.93 0 0 0 2.165-2.724 9.865 9.865 0 0 1-3.127 1.195 4.916 4.916 0 0 0-8.384 4.482A13.944 13.944 0 0 1 1.671 3.149a4.916 4.916 0 0 0 1.523 6.558 4.903 4.903 0 0 1-2.228-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.934 4.934 0 0 1-2.224.085 4.918 4.918 0 0 0 4.588 3.417A9.867 9.867 0 0 1 .96 19.539a13.94 13.94 0 0 0 7.548 2.212c9.058 0 14.01-7.513 14.01-14.01 0-.213-.005-.425-.014-.636A10.025 10.025 0 0 0 24 4.557z" />
+            </svg>
+          </a>
+          <a href="https://www.instagram.com" aria-label="Instagram" target="_blank" class="social-icon instagram">
+            <svg viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.964.24 2.422.417a4.92 4.92 0 0 1 1.675 1.092 4.92 4.92 0 0 1 1.092 1.675c.177.458.363 1.252.417 2.422.058 1.266.069 1.646.069 4.85 0 3.204-.012 3.584-.069 4.85-.054 1.17-.24 1.964-.417 2.422a4.902 4.902 0 0 1-1.092 1.675 4.902 4.902 0 0 1-1.675 1.092c-.458.177-1.252.363-2.422.417C2.175 15.584 2.163 15.204 2.163 12c0-3.204.012-3.584.069-4.85.054-1.17.24-1.964.417-2.422a4.902 4.902 0 0 1 1.092-1.675 4.902 4.902 0 0 1 1.675-1.092c.458-.177 1.252-.363 2.422-.417C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.735 0 8.332.012 7.052.07 5.773.128 4.842.308 4.042.563a7.077 7.077 0 0 0-2.572 1.037 7.077 7.077 0 0 0-1.038 2.572C.309 4.842.129 5.773.071 7.052.012 8.332 0 8.735 0 12s.012 3.668.07 4.948c.058 1.279.238 2.21.493 3.01a7.06 7.06 0 0 0 1.037 2.572 7.06 7.06 0 0 0 2.572 1.037c.8.255 1.731.435 3.01.493 1.28.058 1.683.07 4.948.07s3.668-.012 4.948-.07c1.279-.058 2.21-.238 3.01-.493a7.077 7.077 0 0 0 2.572-1.037 7.077 7.077 0 0 0 1.038-2.572c.255-.8.435-1.731.493-3.01.058-1.28.07-1.683.07-4.948s-.012-3.668-.07-4.948c-.058-1.279-.238-2.21-.493-3.01a7.06 7.06 0 0 0-1.037-2.572 7.06 7.06 0 0 0-2.572-1.037C14.21.309 13.279.129 12 .071 8.735.012 8.332 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324A6.162 6.162 0 0 0 12 5.838zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z" />
+            </svg>
+          </a>
+        </div>
+        <div class="contact-email">
+          <a href="mailto:support@vyliet.com" class="email-link">
+            <svg viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+            </svg>
+            <span>support@vyliet.com</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <script type="module">
+    import { auth } from './firebase.js';
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js';
+
+    const loginBtn = document.querySelector('#login-btn');
+    if (loginBtn) {
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          const img = document.createElement('img');
+          img.src = user.photoURL || 'https://www.gravatar.com/avatar?d=mp&s=32';
+          img.alt = 'Profile';
+          img.style.width = '32px';
+          img.style.height = '32px';
+          img.style.borderRadius = '50%';
+          img.style.objectFit = 'cover';
+          img.style.cursor = 'pointer';
+
+          const link = document.createElement('a');
+          link.href = 'user-profile.html';
+          link.id = 'profile-pic';
+          link.appendChild(img);
+
+          loginBtn.replaceWith(link);
+        }
+      });
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Vyliet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f8fb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .auth-wrapper {
+      width: 100%;
+      max-width: 400px;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .auth-wrapper h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    .auth-wrapper input[type="email"],
+    .auth-wrapper input[type="password"],
+    .auth-wrapper input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .auth-wrapper button {
+      width: 100%;
+      background: #7BCFEF;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .auth-wrapper button:hover {
+      background: #66bfe4;
+    }
+
+    .toggle-auth {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .toggle-auth button {
+      background: none;
+      border: none;
+      color: #007bff;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 14px;
+    }
+
+    .google-btn {
+      background: #fff;
+      color: #333;
+      border: 1px solid #ccc;
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .google-btn img {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="auth-wrapper">
+    <h2 id="auth-title">Sign In</h2>
+    <input type="email" id="auth-email" placeholder="Email" required />
+    <input type="password" id="auth-password" placeholder="Password" required />
+    <input type="text" id="auth-username" placeholder="Username" style="display:none;" />
+    <button id="auth-submit">Sign In</button>
+
+    <button class="google-btn" id="google-login">
+      <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google logo" />
+      Sign in with Google
+    </button>
+
+    <div class="toggle-auth">
+      <span id="toggle-text">Don't have an account?</span>
+      <button id="toggle-button">Sign Up</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db, checkUsernameExists, registerUsername } from './firebase.js';
+    import {
+      GoogleAuthProvider,
+      signInWithPopup,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      sendEmailVerification
+    } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js';
+
+    let isSignUp = false;
+
+    const title = document.getElementById('auth-title');
+    const usernameField = document.getElementById('auth-username');
+    const submitBtn = document.getElementById('auth-submit');
+    const toggleBtn = document.getElementById('toggle-button');
+    const toggleText = document.getElementById('toggle-text');
+
+    toggleBtn.addEventListener('click', () => {
+      isSignUp = !isSignUp;
+      title.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+      usernameField.style.display = isSignUp ? 'block' : 'none';
+      submitBtn.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+      toggleText.textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
+      toggleBtn.textContent = isSignUp ? 'Sign In' : 'Sign Up';
+    });
+
+    submitBtn.addEventListener('click', async () => {
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+
+      if (isSignUp) {
+        const username = usernameField.value.trim();
+        if (!username) return alert("Username required.");
+        if (await checkUsernameExists(username)) return alert("Username already taken.");
+        try {
+          const userCred = await createUserWithEmailAndPassword(auth, email, password);
+          await sendEmailVerification(userCred.user);
+          await registerUsername(userCred.user.uid, username, email);
+          alert("Verification email sent! Please check your inbox before continuing.");
+        } catch (err) {
+          alert("Error: " + err.message);
+        }
+      } else {
+        try {
+          const userCred = await signInWithEmailAndPassword(auth, email, password);
+          if (!userCred.user.emailVerified) {
+            alert("Please verify your email before signing in.");
+            return;
+          }
+          window.location.href = "Vyliet-HTML.html";
+        } catch (err) {
+          alert("Login failed: " + err.message);
+        }
+      }
+    });
+
+    document.getElementById("google-login").addEventListener("click", async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        console.log("Google sign-in:", user.email);
+        window.location.href = "Vyliet-HTML.html";
+      } catch (err) {
+        alert("Google sign-in failed: " + err.message);
+      }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.emailVerified) {
+        console.log("User is verified:", user.email);
+        // Uncomment to auto-redirect on verified login
+        // window.location.href = "Vyliet-HTML.html";
+      }
+    });
+  </script>
+
+</body>
+</html>

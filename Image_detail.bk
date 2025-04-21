@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Detail</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #eef6f9;
+    }
+
+    .header {
+      background: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .logo img {
+      height: 40px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+    }
+
+    .image-display {
+      flex: 2;
+      max-width: 600px;
+    }
+
+    #imageCanvas {
+      width: 100%;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background: white;
+    }
+
+    .details-panel {
+      flex: 1;
+      max-width: 300px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #e0f7ff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #b3e5fc;
+    }
+
+    .btn-like {
+      background-color: #ffe4e8;
+      font-weight: bold;
+    }
+
+    .btn-like.liked {
+      background-color: #ffc0cb;
+      color: #800000;
+      cursor: default;
+    }
+
+    .stats {
+      font-size: 14px;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .comments-section {
+      max-width: 900px;
+      margin: 30px auto 50px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    #commentList {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 10px;
+    }
+
+    #commentList li {
+      margin: 6px 0;
+      padding: 8px;
+      background: #f0f0f0;
+      border-radius: 6px;
+    }
+
+    #commentInput {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      resize: vertical;
+    }
+
+    .header a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #007bff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="logo">
+      <a href="index.html"><img src="Logo.png" alt="Vyliet"></a>
+    </div>
+    <div>
+      <a href="my_favorites.html">❤️ My Favorites</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="image-display">
+      <canvas id="imageCanvas"></canvas>
+    </div>
+    <div class="details-panel" id="detailsPanel">
+      <!-- JS sẽ render -->
+    </div>
+  </div>
+
+  <div class="comments-section">
+    <h3>Bình luận</h3>
+    <ul id="commentList"></ul>
+    <textarea id="commentInput" placeholder="Nhập bình luận..."></textarea>
+    <button id="submitComment" class="btn" style="margin-top:10px;">Gửi bình luận</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById("imageCanvas");
+      const ctx = canvas.getContext("2d");
+      const panel = document.getElementById("detailsPanel");
+
+      const imageData = JSON.parse(localStorage.getItem("selectedImage"));
+      const image = new Image();
+
+      if (!imageData) {
+        alert("Không tìm thấy ảnh.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      image.src = imageData.src;
+      image.onload = () => {
+        canvas.width = image.width;
+        canvas.height = image.height;
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
+
+      let favorites = JSON.parse(localStorage.getItem("favoriteImages")) || [];
+      const alreadyLiked = favorites.some(img => img.src === imageData.src);
+
+      panel.innerHTML = `
+        <button class="btn" id="downloadBtn">⬇️ Download</button>
+        <button class="btn" id="editBtn">✏️ Chỉnh sửa với Canva</button>
+        <button class="btn btn-like ${alreadyLiked ? 'liked' : ''}" id="likeBtn" ${alreadyLiked ? 'disabled' : ''}>
+          ${alreadyLiked ? '❤️ Đã thích' : '❤️ Thêm vào yêu thích'}
+        </button>
+        <div class="stats">
+          <p><strong>Mô tả:</strong> ${imageData.alt}</p>
+          <p><strong>Likes:</strong> ${imageData.likes}</p>
+          <p><strong>Lượt tải:</strong> ${imageData.downloads}</p>
+        </div>
+      `;
+
+      document.getElementById("downloadBtn").addEventListener("click", () => {
+        const link = document.createElement("a");
+        link.href = imageData.src;
+        link.download = "image.jpg";
+        link.click();
+      });
+
+      document.getElementById("editBtn").addEventListener("click", () => {
+        const url = `https://www.canva.com/photo-editor/?image=${encodeURIComponent(imageData.src)}`;
+        window.open(url, "_blank");
+      });
+
+      const likeBtn = document.getElementById("likeBtn");
+      if (!alreadyLiked) {
+        likeBtn.addEventListener("click", () => {
+          favorites.push(imageData);
+          localStorage.setItem("favoriteImages", JSON.stringify(favorites));
+          likeBtn.textContent = "❤️ Đã thích";
+          likeBtn.classList.add("liked");
+          likeBtn.disabled = true;
+        });
+      }
+
+      // === Bình luận ===
+      const commentList = document.getElementById("commentList");
+      const commentInput = document.getElementById("commentInput");
+      const submitBtn = document.getElementById("submitComment");
+
+      const commentKey = "comments_" + imageData.src;
+      let comments = JSON.parse(localStorage.getItem(commentKey)) || [];
+
+      function renderComments() {
+        commentList.innerHTML = "";
+        if (comments.length === 0) {
+          commentList.innerHTML = "<li>Chưa có bình luận nào.</li>";
+          return;
+        }
+        comments.forEach(cmt => {
+          const li = document.createElement("li");
+          li.textContent = cmt;
+          commentList.appendChild(li);
+        });
+      }
+
+      submitBtn.addEventListener("click", () => {
+        const content = commentInput.value.trim();
+        if (!content) return;
+
+        comments.push(content);
+        localStorage.setItem(commentKey, JSON.stringify(comments));
+        commentInput.value = "";
+        renderComments();
+      });
+
+      renderComments();
+    });
+  </script>
+</body>
+</html>
+
