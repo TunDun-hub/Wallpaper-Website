@@ -124,6 +124,63 @@
       font-weight: bold;
       color: #007bff;
     }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .container {
+        flex-direction: column;
+        padding: 10px;
+      }
+
+      .image-display {
+        max-width: 100%;
+      }
+
+      .details-panel {
+        max-width: 100%;
+        margin-top: 20px;
+      }
+
+      .comments-section {
+        padding: 10px;
+      }
+
+      #commentInput {
+        font-size: 14px;
+      }
+
+      .btn {
+        font-size: 12px;
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 10px;
+      }
+
+      .logo img {
+        height: 30px;
+      }
+
+      .header a {
+        font-size: 14px;
+      }
+
+      .stats p {
+        font-size: 12px;
+      }
+
+      .comments-section {
+        margin: 20px auto;
+      }
+    }
   </style>
 </head>
 
