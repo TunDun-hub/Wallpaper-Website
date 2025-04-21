@@ -159,7 +159,7 @@
             alert("Please verify your email before signing in.");
             return;
           }
-          window.location.href = "Vyliet-HTML.html";
+          window.location.href = "index.html";
         } catch (err) {
           alert("Login failed: " + err.message);
         }
@@ -172,7 +172,7 @@
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         console.log("Google sign-in:", user.email);
-        window.location.href = "Vyliet-HTML.html";
+        window.location.href = "index.html";
       } catch (err) {
         alert("Google sign-in failed: " + err.message);
       }
@@ -182,7 +182,7 @@
       if (user && user.emailVerified) {
         console.log("User is verified:", user.email);
         // Uncomment to auto-redirect on verified login
-        // window.location.href = "Vyliet-HTML.html";
+        // window.location.href = "index.html";
       }
     });
   </script>
