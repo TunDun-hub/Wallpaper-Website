@@ -4,12 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vyliet.com</title>
-  <!-- External scripts -->
-  <script src="filters.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js"></script>
-  <script src="firebase.js"></script>
+  <title>Vyliet</title>
   <style>
     body {
       font-family: sans-serif;
@@ -22,15 +17,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 20px;
+      padding: 0;
       border-bottom: 1px solid #ddd;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       background-color: #ffffff;
-      margin-bottom: 25px;
-      margin-top: 10px;
-      margin-left: 10px;
-      margin-right: 10px;
-      border-radius: 6px;
     }
   
     .search-container {
@@ -238,44 +228,41 @@
     .filters {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      padding: 12px 24px;
+      gap: 8px;
+      padding: 16px 24px;
       border-bottom: 1px solid #ddd;
       font-size: 14px;
-      background: white;
-      margin-top: 0;
     }
   
-    .filter-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      background: #f8f9fa;
-      padding: 8px;
-      border-radius: 8px;
-    }
-  
-    .filter-btn {
+    .filter-dropdown {
       padding: 8px 16px;
+      border-radius: 9999px;
       border: 1px solid #ddd;
-      border-radius: 20px;
       background: white;
-      color: #333;
-      font-size: 14px;
       cursor: pointer;
+      font-size: 14px;
+      color: #333;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 16px;
+      padding-right: 32px;
+      min-width: 120px;
       transition: all 0.3s ease;
-      white-space: nowrap;
     }
   
-    .filter-btn:hover {
+    .filter-dropdown:hover {
       border-color: #4a90e2;
       color: #4a90e2;
     }
   
-    .filter-btn.active {
-      background: #4a90e2;
-      color: white;
+    .filter-dropdown:focus {
+      outline: none;
       border-color: #4a90e2;
+      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
     }
   
     .content {
@@ -293,42 +280,38 @@
     }
   
     .image-grid {
-      columns: 4;
+      column-count: 4;
       column-gap: 20px;
-      padding: 20px;
+      margin-top: 20px;
+      padding: 0 20px;
     }
   
     @media (max-width: 1200px) {
       .image-grid {
-        columns: 3;
+        column-count: 3;
       }
     }
   
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       .image-grid {
-        columns: 2;
+        column-count: 2;
       }
     }
   
-    @media (max-width: 480px) {
+    @media (max-width: 600px) {
       .image-grid {
-        columns: 1;
+        column-count: 1;
       }
     }
   
     .image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
       break-inside: avoid;
       margin-bottom: 20px;
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #f0f0f0;
+      background: white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-    }
-  
-    .image-container:hover {
-      transform: translateY(-4px);
     }
   
     .image-container img {
@@ -336,6 +319,16 @@
       height: auto;
       display: block;
       object-fit: cover;
+      transition: transform 0.2s ease;
+    }
+  
+    .image-container:hover img {
+      transform: scale(1.02);
+    }
+  
+    .logo img {
+      width: 120px;
+      height: auto;
     }
   
     .image-overlay {
@@ -343,10 +336,11 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4) 50%, transparent);
-      padding: 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      padding: 10px;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease;
+      pointer-events: none; /* Đảm bảo lớp phủ không chặn sự kiện click */
     }
   
     .image-container:hover .image-overlay {
@@ -357,18 +351,11 @@
       display: flex;
       justify-content: space-between;
       color: white;
-      font-size: 14px;
-      font-weight: 500;
-    }
-  
-    .image-info span {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 12px;
     }
   
     .image-item {
-      cursor: pointer;
+      cursor: pointer; /* Đảm bảo con trỏ chuột hiển thị khi hover vào ảnh */
     }
   
     .error-message, .no-results {
@@ -523,35 +510,6 @@
           gap: 3rem;
       }
   }
-
-  .logo img {
-    width: 80px;
-    height: auto;
-  }
-
-  @media (max-width: 600px) {
-    .logo img {
-      width: 60px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .filters {
-      padding: 8px 16px;
-    }
-    
-    .filter-group {
-      width: 100%;
-      overflow-x: auto;
-      padding: 8px;
-      -webkit-overflow-scrolling: touch;
-    }
-    
-    .filter-btn {
-      padding: 6px 12px;
-      font-size: 13px;
-    }
-  }
   </style>
 </head>
 
@@ -570,7 +528,7 @@
           <path d="M19 19L14.65 14.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" />
         </svg>
-        <input type="text" id="searchInput" placeholder="Search images...">
+        <input type="text" value="" id="searchInput" placeholder="Search images...">
         <button class="clear-button" id="clearButton" title="Clear search">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1L11 11M1 11L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -579,35 +537,52 @@
       </div>
     </div>
     <div class="action-buttons">
-      <a href="about-us.html" class="button" id="about-us-btn">About us</a>
+      <div class="explore-dropdown">
+        <select class="dropdown">
+          <option value="">Explore</option>
+          <option value=""></option>
+          <option value=""></option>
+          <option value=""></option>
+        </select>
+      </div>
       <a href="vyliet_login_verified.html" id="login-btn">Log in</a>
     </div>
   </header>
 
   <div class="filters">
-    <div class="filter-group">
-      <button class="filter-btn active" data-filter="type" data-value="all">All images</button>
-      <button class="filter-btn" data-filter="type" data-value="photo">Photos</button>
-      <button class="filter-btn" data-filter="type" data-value="illustration">Illustrations</button>
-      <button class="filter-btn" data-filter="type" data-value="vector">Vectors</button>
-    </div>
-    <div class="filter-group">
-      <button class="filter-btn active" data-filter="orientation" data-value="all">All orientation</button>
-      <button class="filter-btn" data-filter="orientation" data-value="horizontal">Horizontal</button>
-      <button class="filter-btn" data-filter="orientation" data-value="vertical">Vertical</button>
-    </div>
-    <div class="filter-group">
-      <button class="filter-btn active" data-filter="size" data-value="all">All size</button>
-      <button class="filter-btn" data-filter="size" data-value="480p">480p</button>
-      <button class="filter-btn" data-filter="size" data-value="720p">720p</button>
-      <button class="filter-btn" data-filter="size" data-value="1080p">1080p</button>
-      <button class="filter-btn" data-filter="size" data-value="2k">2K</button>
-      <button class="filter-btn" data-filter="size" data-value="4k">4K</button>
-      <button class="filter-btn" data-filter="size" data-value="5k">5K</button>
-      <button class="filter-btn" data-filter="size" data-value="8k">8K</button>
+    <select class="filter-dropdown">
+      <option value="">All images</option>
+      <option value=""></option>
+      <option value=""></option>
+    </select>
+    <select class="filter-dropdown">
+      <option value="">Orientation</option>
+      <option value=""></option>
+      <option value=""></option>
+    </select>
+    <select class="filter-dropdown">
+      <option value="">Size</option>
+      <option value=""></option>
+      <option value=""></option>
+    </select>
+    <select class="filter-dropdown">
+      <option value="">Published date</option>
+      <option value=""></option>
+      <option value=""></option>
+    </select>
+    <select class="filter-dropdown">
+      <option value="">Tag</option>
+      <option value=""></option>
+      <option value=""></option>
+    </select>
+    <div style="margin-left:auto">
+      <select class="filter-dropdown">
+        <option value="">Most relevant</option>
+        <option value=""></option>
+        <option value=""></option>
+      </select>
     </div>
   </div>
-
   <div class="image-grid" id="apiImageGrid">
     <!-- Images will be loaded here via JavaScript -->
   </div>
@@ -643,14 +618,11 @@
         </div>
     </div>
 </section>
-
-  <!-- Main application script -->
   <script>
     // API Configuration
     const PIXABAY_API_KEY = '49820812-01b57383da4bf4fe5a9de51d4';
     const PIXABAY_API_URL = 'https://pixabay.com/api/';
     const IMAGES_PER_PAGE = 20;
-    const MAX_PAGES = 500; // Pixabay API limit
 
     // DOM Elements
     let searchInput;
@@ -662,7 +634,7 @@
     let totalPagesElement;
     let currentPage = 1;
     let totalPages = 1;
-    let currentQuery = '';
+    let currentQuery = 'nature';
 
     // Initialize the application
     function init() {
@@ -683,9 +655,6 @@
 
       // Set up event listeners
       setupEventListeners();
-
-      // Set up filter button listeners
-      setupFilterButtons();
 
       // Initial state
       updateClearButton();
@@ -710,32 +679,6 @@
       // Pagination events
       prevButton.addEventListener('click', () => changePage(currentPage - 1));
       nextButton.addEventListener('click', () => changePage(currentPage + 1));
-    }
-
-    // Set up filter button listeners
-    function setupFilterButtons() {
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const filterGroup = button.closest('.filter-group');
-          const filterType = button.dataset.filter;
-          
-          // Remove active class from all buttons in the same group
-          filterGroup.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-          });
-          
-          // Add active class to clicked button
-          button.classList.add('active');
-          
-          // Update filter value
-          const filterValue = button.dataset.value;
-          if (window.filterManager) {
-            window.filterManager.filters[filterType] = filterValue;
-            window.filterManager.applyFilters();
-          }
-        });
-      });
     }
 
     // Change page
@@ -770,9 +713,10 @@
       searchInput.value = '';
       searchInput.focus();
       updateClearButton();
-      currentQuery = '';
+      currentQuery = 'nature';
       currentPage = 1;
       imageGrid.innerHTML = '';
+      fetchImages('nature', 1);
     }
 
     // Update clear button visibility
@@ -785,22 +729,31 @@
     // Fetch images from Pixabay API
     async function fetchImages(query = 'nature', page = 1) {
       try {
-        const response = await fetch(`${PIXABAY_API_URL}?key=${PIXABAY_API_KEY}&q=${query}&per_page=${IMAGES_PER_PAGE}&page=${page}&image_type=photo&safesearch=true`);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        // Make multiple requests to get enough images
+        const requests = [];
+        const imagesPerRequest = 20; // Pixabay's maximum per request
+        const numberOfRequests = 4; // We need 4 requests to get 80 images
+
+        for (let i = 0; i < numberOfRequests; i++) {
+          const requestPage = (page - 1) * numberOfRequests + i + 1;
+          requests.push(
+            fetch(`${PIXABAY_API_URL}?key=${PIXABAY_API_KEY}&q=${query}&per_page=${imagesPerRequest}&page=${requestPage}&image_type=photo&safesearch=true`)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
+          );
         }
-        
-        const data = await response.json();
-        console.log('API Response:', data); // For debugging
-        
-        // Update total pages based on API response
-        const totalHits = Math.min(data.totalHits, MAX_PAGES * IMAGES_PER_PAGE);
-        totalPages = Math.ceil(totalHits / IMAGES_PER_PAGE);
-        console.log(`Total hits: ${data.totalHits}, Total pages: ${totalPages}`);
-        
-        displayImages(data.hits);
+
+        const results = await Promise.all(requests);
+        const allImages = results.flatMap(result => result.hits);
+
+        // Calculate total pages based on total hits from first request
+        totalPages = Math.ceil(results[0].totalHits / IMAGES_PER_PAGE);
         updatePaginationUI();
+        displayImages(allImages);
       } catch (error) {
         console.error('Error fetching images:', error);
         imageGrid.innerHTML = '<div class="error-message">Failed to load images. Please try again later.</div>';
@@ -808,26 +761,6 @@
     }
 
     // Display images in the grid
-    function formatNumber(num) {
-      if (!num && num !== 0) return '0';
-      
-      try {
-        num = parseInt(num);
-        if (isNaN(num)) return '0';
-        
-        if (num >= 1000000) {
-          return (num / 1000000).toFixed(1) + 'M';
-        }
-        if (num >= 1000) {
-          return (num / 1000).toFixed(1) + 'K';
-        }
-        return num.toString();
-      } catch (e) {
-        console.error('Error formatting number:', e);
-        return '0';
-      }
-    }
-
     function displayImages(images) {
       imageGrid.innerHTML = '';
 
@@ -836,50 +769,28 @@
         return;
       }
 
-      console.log('API Response Data:', images); // Log API data
+      // Sort images by height to optimize column filling
+      images.sort((a, b) => {
+        const ratioA = a.webformatHeight / a.webformatWidth;
+        const ratioB = b.webformatHeight / b.webformatWidth;
+        return ratioA - ratioB;
+      });
 
       images.forEach(photo => {
-        // Validate photo object
-        if (!photo || typeof photo !== 'object') {
-          console.error('Invalid photo data:', photo);
-          return;
-        }
-
         const imgContainer = document.createElement('div');
         imgContainer.className = 'image-container';
-        
-        // Add data attributes for filtering
-        imgContainer.dataset.type = photo.type || 'photo'; // Use API's type field
-        imgContainer.dataset.orientation = photo.imageWidth > photo.imageHeight ? 'horizontal' : 'vertical';
-        imgContainer.dataset.width = photo.imageWidth;
-        imgContainer.dataset.height = photo.imageHeight;
-        imgContainer.dataset.size = getSizeCategory(photo.imageWidth, photo.imageHeight);
-
-        console.log('Image Data:', {
-          type: imgContainer.dataset.type,
-          orientation: imgContainer.dataset.orientation,
-          width: imgContainer.dataset.width,
-          height: imgContainer.dataset.height,
-          size: imgContainer.dataset.size
-        });
 
         const img = document.createElement('img');
-        img.src = photo.webformatURL || '';
-        img.alt = photo.tags || 'Image';
+        img.src = photo.webformatURL;
+        img.alt = photo.tags || 'Nature image';
         img.loading = 'lazy';
 
-        // Ensure numeric values
-        const likes = parseInt(photo.likes) || 0;
-        const downloads = parseInt(photo.downloads) || 0;
-        const views = parseInt(photo.views) || 0;
-
+        // Thêm thông tin ảnh vào đối tượng dữ liệu
         const imageInfo = {
-          src: photo.webformatURL || '',
-          alt: photo.tags || 'Image',
-          likes: likes,
-          downloads: downloads,
-          views: views,
-          user: photo.user || 'Unknown'
+          src: photo.webformatURL,
+          alt: photo.tags || 'Nature image',
+          likes: photo.likes,
+          downloads: photo.downloads,
         };
 
         img.addEventListener('click', () => {
@@ -887,43 +798,20 @@
           window.location.href = "Image_detail.html";
         });
 
+        // Add image info overlay
         const overlay = document.createElement('div');
         overlay.className = 'image-overlay';
         overlay.innerHTML = `
-            <div class="image-info">
-                <span class="likes" title="${likes.toLocaleString()} likes">
-                    ❤️ ${formatNumber(likes)}
-                </span>
-                <span class="downloads" title="${downloads.toLocaleString()} downloads">
-                    ⬇️ ${formatNumber(downloads)}
-                </span>
-            </div>
+          <div class="image-info">
+              <span class="likes">❤️ ${photo.likes}</span>
+              <span class="downloads">⬇️ ${photo.downloads}</span>
+          </div>
         `;
 
         imgContainer.appendChild(img);
         imgContainer.appendChild(overlay);
         imageGrid.appendChild(imgContainer);
       });
-
-      // Apply filters after images are loaded
-      if (window.filterManager) {
-        window.filterManager.applyFilters();
-      }
-    }
-
-    // Helper function to determine size category
-    function getSizeCategory(width, height) {
-      const totalPixels = width * height;
-      console.log('Image dimensions:', { width, height, totalPixels });
-      
-      if (totalPixels >= 7680 * 4320) return '8k';      // 8K: 7680x4320
-      if (totalPixels >= 5120 * 2880) return '5k';      // 5K: 5120x2880
-      if (totalPixels >= 3840 * 2160) return '4k';      // 4K: 3840x2160
-      if (totalPixels >= 2560 * 1440) return '2k';      // 2K: 2560x1440
-      if (totalPixels >= 1920 * 1080) return '1080p';   // 1080p: 1920x1080
-      if (totalPixels >= 1280 * 720) return '720p';     // 720p: 1280x720
-      if (totalPixels >= 854 * 480) return '480p';      // 480p: 854x480
-      return 'small';
     }
 
     // Initialize the application when DOM is loaded
@@ -1008,19 +896,13 @@
 
   </script>
 
-<script>
-  // Firebase initialization
-  const firebaseConfig = {
-    // Your Firebase config here
-  };
-
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+<script type="module">
+  import { auth } from './firebase.js';
+  import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js';
 
   const loginBtn = document.querySelector('#login-btn');
   if (loginBtn) {
-    auth.onAuthStateChanged(user => {
+    onAuthStateChanged(auth, user => {
       if (user) {
         const img = document.createElement('img');
         img.src = user.photoURL || 'https://www.gravatar.com/avatar?d=mp&s=32';
@@ -1041,5 +923,7 @@
     });
   }
 </script>
+
 </body>
+
 </html>
