@@ -340,7 +340,7 @@
       padding: 10px;
       opacity: 0;
       transition: opacity 0.2s ease;
-      pointer-events: none; /* Đảm bảo lớp phủ không chặn sự kiện click */
+      pointer-events: none;
     }
   
     .image-container:hover .image-overlay {
@@ -355,7 +355,7 @@
     }
   
     .image-item {
-      cursor: pointer; /* Đảm bảo con trỏ chuột hiển thị khi hover vào ảnh */
+      cursor: pointer; 
     }
   
     .error-message, .no-results {
@@ -860,13 +860,6 @@
         console.error("Element with id 'apiImageGrid' not found.");
         return;
       }
-
-      // Ví dụ: Tải ảnh động (thay thế bằng logic API của bạn)
-      const images = [
-        { id: 1, src: "image1.jpg", alt: "Image 1" },
-        { id: 2, src: "image2.jpg", alt: "Image 2" },
-        { id: 3, src: "image3.jpg", alt: "Image 3" },
-      ];
 
       // Tạo các phần tử ảnh và thêm sự kiện click
       images.forEach((image) => {
